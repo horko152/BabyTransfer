@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BabyTransfer", "BabyTransfer\BabyTransfer.csproj", "{474DBC53-6080-4FD7-A7C3-13F0E57F54E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{ACC4FA3C-B603-4998-97B0-8730330C943C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{474DBC53-6080-4FD7-A7C3-13F0E57F54E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{474DBC53-6080-4FD7-A7C3-13F0E57F54E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{474DBC53-6080-4FD7-A7C3-13F0E57F54E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{474DBC53-6080-4FD7-A7C3-13F0E57F54E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACC4FA3C-B603-4998-97B0-8730330C943C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACC4FA3C-B603-4998-97B0-8730330C943C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACC4FA3C-B603-4998-97B0-8730330C943C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACC4FA3C-B603-4998-97B0-8730330C943C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6C816C99-348C-46FE-AB46-5B74D217FE82}
+	EndGlobalSection
+EndGlobal
