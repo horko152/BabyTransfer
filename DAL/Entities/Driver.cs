@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -7,28 +8,46 @@ using System.Text.Json.Serialization;
 namespace DAL.Entities
 {
 	[Table("drivers")]
-	public class Driver : User
+	public class Driver
 	{
-		[Column("vehicletype")]
-		public string VehicleType { get; set; }
-		[Column("vehiclenumber")]
-		public string VehicleNumber { get; set; }
-		[Column("vehicledescription")]
-		public string VehicleDescription { get; set; }
+		[Key]
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		[Column("id")]
+		public int Id { get; set; }
+
+		[Column("user_id")]
+		public int UserId { get; set; }
+
+		[ForeignKey("UserId")]
+		[JsonIgnore]
+		public User User { get; set; }
+
+		[Column("vehicletype_id")]
+		public int VehicleTypeId { get; set; }
+
 		[Column("cardnumber")]
 		public string CardNumber { get; set; }
+
 		[Column("priceforcall")]
 		public decimal PriceForCall { get; set; }
+
 		[Column("priceforkm")]
 		public decimal PriceForKm { get; set; }
-		[Column("startworking")]
-		public TimeSpan StartWorking { get; set; }
-		[Column("stopworking")]
-		public TimeSpan StopWorking { get; set; }
-		[Column("pausefrom")]
-		public TimeSpan PauseFrom { get; set; }
-		[Column("pauseto")]
-		public TimeSpan PauseTo { get; set; }
+
+		[Column("time_id")]
+		public int TimeId { get; set; }
+
+		[ForeignKey("VehicleTypeId")]
+		[JsonIgnore]
+		public VehicleType VehicleType { get; set; }
+
+		[ForeignKey("TimeId")]
+		[JsonIgnore]
+		public Time Time  { get; set; }
+
+		[JsonIgnore]
+		public ICollection<CarSeat> CarSeats { get; set; }
+
 		[JsonIgnore]
 		public ICollection<Order> Orders { get; set; }
 

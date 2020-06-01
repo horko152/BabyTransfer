@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,12 +9,16 @@ namespace DAL
 	public class TransferDbContext : DbContext
 	{
 		public TransferDbContext() { }
-		//Нижче будуть DbSet
-
+		public DbSet<User> Users { get; set; }
+		public DbSet<Customer> Customers { get; set; }
+		public DbSet<Driver> Driverss { get; set; }
+		public DbSet<VehicleType> VehicleTypes { get; set; }
+		public DbSet<Time> Times { get; set; }
+		public DbSet<Order> Orders { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			optionsBuilder.UseNpgsql(@"Host=ec2-54-246-85-151.eu-west-1.compute.amazonaws.com; Port=5432; Database=d1ev4oevtggnb4; Username=asntnkxuaztbvo; Password = 9c9f8f3faa8054d8f8abfdca04a9375b1c03f574ed9cc7b4114dc43aa1da95e4; Use SSL Stream = True; SSL Mode = Require; TrustServerCertificate = True");
+			optionsBuilder.UseSqlServer(@"Server=DESKTOP-MFSAQ2U;Database=BabyTransferDb;Trusted_Connection=True;");
 		}
 	}
 }
