@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(TransferDbContext))]
-    [Migration("20200601130450_ChangeCarSeatTableName")]
-    partial class ChangeCarSeatTableName
+    [Migration("20200625112330_InitLocalDatabase")]
+    partial class InitLocalDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,6 +21,29 @@ namespace DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("DAL.Entities.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AddressName")
+                        .HasColumnName("address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CityId")
+                        .HasColumnName("city_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.ToTable("addresses");
+                });
+
             modelBuilder.Entity("DAL.Entities.CarSeat", b =>
                 {
                     b.Property<int>("Id")
@@ -29,8 +52,12 @@ namespace DAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CarSeatType")
-                        .HasColumnName("carseat")
+                    b.Property<DateTime>("CarSeatFrom")
+                        .HasColumnName("carseatfrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CarseatTo")
+                        .HasColumnName("carseatto")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("DriverId")
@@ -71,6 +98,23 @@ namespace DAL.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("children");
+                });
+
+            modelBuilder.Entity("DAL.Entities.City", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CityName")
+                        .HasColumnName("city")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("cities");
                 });
 
             modelBuilder.Entity("DAL.Entities.Customer", b =>
@@ -115,14 +159,6 @@ namespace DAL.Migrations
                     b.Property<string>("CardNumber")
                         .HasColumnName("cardnumber")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("PriceForCall")
-                        .HasColumnName("priceforcall")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("PriceForKm")
-                        .HasColumnName("priceforkm")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("TimeId")
                         .HasColumnName("time_id")
@@ -171,9 +207,9 @@ namespace DAL.Migrations
                         .HasColumnName("backandforth")
                         .HasColumnType("bit");
 
-                    b.Property<string>("City")
-                        .HasColumnName("city")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("CityId")
+                        .HasColumnName("city_id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Comment")
                         .HasColumnName("comment")
@@ -195,25 +231,65 @@ namespace DAL.Migrations
                         .HasColumnName("driver_id")
                         .HasColumnType("int");
 
-                    b.Property<string>("Status")
-                        .HasColumnName("status")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("StatusId")
+                        .HasColumnName("status_id")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("TimeOfCall")
                         .HasColumnName("timeofcall")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("VehicleType")
-                        .HasColumnName("vehicletype")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("VehicleTypeId")
+                        .HasColumnName("vehicletype_id")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CityId");
 
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("DriverId");
 
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("VehicleTypeId");
+
                     b.ToTable("orders");
+                });
+
+            modelBuilder.Entity("DAL.Entities.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("roles");
+                });
+
+            modelBuilder.Entity("DAL.Entities.Status", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("StatusName")
+                        .HasColumnName("status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("statuses");
                 });
 
             modelBuilder.Entity("DAL.Entities.Time", b =>
@@ -253,9 +329,9 @@ namespace DAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("City")
-                        .HasColumnName("city")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("CityId")
+                        .HasColumnName("city_id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasColumnName("email")
@@ -277,11 +353,15 @@ namespace DAL.Migrations
                         .HasColumnName("phone")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Role")
-                        .HasColumnName("role")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("RoleId")
+                        .HasColumnName("role_id")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("users");
                 });
@@ -302,6 +382,22 @@ namespace DAL.Migrations
                         .HasColumnName("number")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("NumberOfOlaces")
+                        .HasColumnName("numberofplaces")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("PriceForCall")
+                        .HasColumnName("priceforcall")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PriceForDownTime")
+                        .HasColumnName("pricefordowntime")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PriceForKm")
+                        .HasColumnName("priceforkm")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("Type")
                         .HasColumnName("type")
                         .HasColumnType("nvarchar(max)");
@@ -309,6 +405,15 @@ namespace DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("vehicletypes");
+                });
+
+            modelBuilder.Entity("DAL.Entities.Address", b =>
+                {
+                    b.HasOne("DAL.Entities.City", "City")
+                        .WithMany("Addresses")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DAL.Entities.CarSeat", b =>
@@ -367,6 +472,10 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Entities.Order", b =>
                 {
+                    b.HasOne("DAL.Entities.City", "City")
+                        .WithMany("Orders")
+                        .HasForeignKey("CityId");
+
                     b.HasOne("DAL.Entities.Customer", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId");
@@ -374,6 +483,31 @@ namespace DAL.Migrations
                     b.HasOne("DAL.Entities.Driver", "Driver")
                         .WithMany("Orders")
                         .HasForeignKey("DriverId");
+
+                    b.HasOne("DAL.Entities.Status", "Status")
+                        .WithMany("Orders")
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Entities.VehicleType", "VehicleType")
+                        .WithMany("Orders")
+                        .HasForeignKey("VehicleTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DAL.Entities.User", b =>
+                {
+                    b.HasOne("DAL.Entities.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId");
+
+                    b.HasOne("DAL.Entities.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

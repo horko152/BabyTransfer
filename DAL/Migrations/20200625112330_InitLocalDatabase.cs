@@ -3,10 +3,49 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DAL.Migrations
 {
-    public partial class InitDatabase : Migration
+    public partial class InitLocalDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "cities",
+                columns: table => new
+                {
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    city = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_cities", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "roles",
+                columns: table => new
+                {
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_roles", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "statuses",
+                columns: table => new
+                {
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    status = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_statuses", x => x.id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "times",
                 columns: table => new
@@ -24,6 +63,45 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "vehicletypes",
+                columns: table => new
+                {
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    type = table.Column<string>(nullable: true),
+                    numberofplaces = table.Column<int>(nullable: false),
+                    number = table.Column<string>(nullable: true),
+                    description = table.Column<string>(nullable: true),
+                    priceforcall = table.Column<decimal>(nullable: false),
+                    priceforkm = table.Column<decimal>(nullable: false),
+                    pricefordowntime = table.Column<decimal>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_vehicletypes", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "addresses",
+                columns: table => new
+                {
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    address = table.Column<string>(nullable: true),
+                    city_id = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_addresses", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_addresses_cities_city_id",
+                        column: x => x.city_id,
+                        principalTable: "cities",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "users",
                 columns: table => new
                 {
@@ -34,27 +112,24 @@ namespace DAL.Migrations
                     phone = table.Column<string>(nullable: true),
                     email = table.Column<string>(nullable: true),
                     password = table.Column<string>(nullable: true),
-                    role = table.Column<string>(nullable: true),
-                    city = table.Column<string>(nullable: true)
+                    role_id = table.Column<int>(nullable: false),
+                    city_id = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_users", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "vehicletypes",
-                columns: table => new
-                {
-                    id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    type = table.Column<string>(nullable: true),
-                    number = table.Column<string>(nullable: true),
-                    description = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_vehicletypes", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_users_cities_city_id",
+                        column: x => x.city_id,
+                        principalTable: "cities",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_users_roles_role_id",
+                        column: x => x.role_id,
+                        principalTable: "roles",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -88,8 +163,6 @@ namespace DAL.Migrations
                     user_id = table.Column<int>(nullable: false),
                     vehicletype_id = table.Column<int>(nullable: false),
                     cardnumber = table.Column<string>(nullable: true),
-                    priceforcall = table.Column<decimal>(nullable: false),
-                    priceforkm = table.Column<decimal>(nullable: false),
                     time_id = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -116,19 +189,20 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CarSeat",
+                name: "carseats",
                 columns: table => new
                 {
                     id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    carseat = table.Column<DateTime>(nullable: false),
+                    carseatfrom = table.Column<DateTime>(nullable: false),
+                    carseatto = table.Column<DateTime>(nullable: false),
                     driver_id = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CarSeat", x => x.id);
+                    table.PrimaryKey("PK_carseats", x => x.id);
                     table.ForeignKey(
-                        name: "FK_CarSeat_drivers_driver_id",
+                        name: "FK_carseats_drivers_driver_id",
                         column: x => x.driver_id,
                         principalTable: "drivers",
                         principalColumn: "id",
@@ -142,13 +216,13 @@ namespace DAL.Migrations
                     id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     customer_id = table.Column<int>(nullable: true),
-                    status = table.Column<string>(nullable: true),
+                    status_id = table.Column<int>(nullable: false),
                     driver_id = table.Column<int>(nullable: true),
                     timeofcall = table.Column<DateTime>(nullable: false),
-                    city = table.Column<string>(nullable: true),
+                    city_id = table.Column<int>(nullable: true),
                     addressofcall = table.Column<string>(nullable: true),
                     addressoftransfer = table.Column<string>(nullable: true),
-                    vehicletype = table.Column<string>(nullable: true),
+                    vehicletype_id = table.Column<int>(nullable: false),
                     backandforth = table.Column<bool>(nullable: false),
                     comment = table.Column<string>(nullable: true),
                     distance = table.Column<double>(nullable: false),
@@ -158,6 +232,12 @@ namespace DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_orders", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_orders_cities_city_id",
+                        column: x => x.city_id,
+                        principalTable: "cities",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_orders_customers_customer_id",
                         column: x => x.customer_id,
@@ -170,6 +250,18 @@ namespace DAL.Migrations
                         principalTable: "drivers",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_orders_statuses_status_id",
+                        column: x => x.status_id,
+                        principalTable: "statuses",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_orders_vehicletypes_vehicletype_id",
+                        column: x => x.vehicletype_id,
+                        principalTable: "vehicletypes",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -200,8 +292,13 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CarSeat_driver_id",
-                table: "CarSeat",
+                name: "IX_addresses_city_id",
+                table: "addresses",
+                column: "city_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_carseats_driver_id",
+                table: "carseats",
                 column: "driver_id");
 
             migrationBuilder.CreateIndex(
@@ -235,6 +332,11 @@ namespace DAL.Migrations
                 column: "vehicletype_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_orders_city_id",
+                table: "orders",
+                column: "city_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_orders_customer_id",
                 table: "orders",
                 column: "customer_id");
@@ -243,12 +345,35 @@ namespace DAL.Migrations
                 name: "IX_orders_driver_id",
                 table: "orders",
                 column: "driver_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_orders_status_id",
+                table: "orders",
+                column: "status_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_orders_vehicletype_id",
+                table: "orders",
+                column: "vehicletype_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_users_city_id",
+                table: "users",
+                column: "city_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_users_role_id",
+                table: "users",
+                column: "role_id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CarSeat");
+                name: "addresses");
+
+            migrationBuilder.DropTable(
+                name: "carseats");
 
             migrationBuilder.DropTable(
                 name: "children");
@@ -263,6 +388,9 @@ namespace DAL.Migrations
                 name: "drivers");
 
             migrationBuilder.DropTable(
+                name: "statuses");
+
+            migrationBuilder.DropTable(
                 name: "times");
 
             migrationBuilder.DropTable(
@@ -270,6 +398,12 @@ namespace DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "vehicletypes");
+
+            migrationBuilder.DropTable(
+                name: "cities");
+
+            migrationBuilder.DropTable(
+                name: "roles");
         }
     }
 }

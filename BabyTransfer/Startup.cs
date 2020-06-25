@@ -1,21 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BabyTransfer.Security;
+using DAL;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System;
+using System.Text;
 
 namespace BabyTransfer
 {
@@ -31,6 +26,19 @@ namespace BabyTransfer
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			//var connectionString = Configuration["server=localhost;user=igor;password=W9n3J0c0;port=3306;database=igor"];
+
+			//services.AddEntityFrameworkMySql()
+			//	.AddDbContext<TransferDbContext>(options => options
+			//		.UseMySql(connectionString, sqlOptions => {
+			//			sqlOptions.MigrationsAssembly("WebApplication6");
+			//			sqlOptions.EnableRetryOnFailure(
+			//				maxRetryCount: 4,
+			//				maxRetryDelay: TimeSpan.FromMilliseconds(2000),
+			//				errorNumbersToAdd: null);
+			//		})
+			//		.EnableSensitiveDataLogging()
+			//		.EnableDetailedErrors());
 			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(cfg =>
 			{
 				cfg.RequireHttpsMetadata = false;
@@ -52,11 +60,11 @@ namespace BabyTransfer
 
 			services.AddAuthorization(options =>
 			{
-				options.AddPolicy("OnlyAdmins", policy => policy.RequireClaim("Role","Admin"));
+				options.AddPolicy("OnlyAdmins", policy => policy.RequireClaim("Role", "Admin"));
 				options.AddPolicy("OnlyDrivers", policy => policy.RequireClaim("Role", "Driver"));
 				options.AddPolicy("OnlyCustomers", policy => policy.RequireClaim("Role", "Customer"));
 			});
-		
+
 			services.AddCors(c =>
 			{
 				c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());

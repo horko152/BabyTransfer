@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 using System.Text.Json.Serialization;
 
 namespace DAL.Entities
@@ -28,12 +26,6 @@ namespace DAL.Entities
 		[Column("cardnumber")]
 		public string CardNumber { get; set; }
 
-		[Column("priceforcall")]
-		public decimal PriceForCall { get; set; }
-
-		[Column("priceforkm")]
-		public decimal PriceForKm { get; set; }
-
 		[Column("time_id")]
 		public int TimeId { get; set; }
 
@@ -43,7 +35,7 @@ namespace DAL.Entities
 
 		[ForeignKey("TimeId")]
 		[JsonIgnore]
-		public Time Time  { get; set; }
+		public Time Time { get; set; }
 
 		[JsonIgnore]
 		public ICollection<CarSeat> CarSeats { get; set; }
