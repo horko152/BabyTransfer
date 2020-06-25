@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DAL.Entities
+﻿namespace DAL.Entities
 {
-	public class Credentials
+	public class RegistrCredentials
 	{
 		public string Name { get; set; }
 		public string Phone { get; set; }

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 using System.Text.Json.Serialization;
 
 namespace DAL.Entities
@@ -31,12 +28,19 @@ namespace DAL.Entities
 		[Column("password")]
 		public string Password { get; set; }
 
-		[Column("role")]
-		[DefaultValue(Entities.Role.Customer)]
-		public string Role { get; set; }
+		[Column("role_id")]
+		public int RoleId { get; set; }
 
-		[Column("city")]
-		public string City { get; set; }
+		[Column("city_id")]
+		public int? CityId { get; set; }
+
+		[ForeignKey("CityId")]
+		[JsonIgnore]
+		public City City { get; set; }
+
+		[JsonIgnore]
+		[ForeignKey("RoleId")]
+		public Role Role { get; set; }
 
 		[JsonIgnore]
 		public ICollection<Customer> Customers { get; set; }

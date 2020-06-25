@@ -1,22 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace DAL.Entities
 {
-	[Table("roles")]
-	public class Role
+	[Table("cities")]
+	public class City
 	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		[Column("id")]
 		public int Id { get; set; }
 
-		[Column("name")]
-		public string Name { get; set; }
+		[Column("city")]
+		public string CityName { get; set; }
 
-		[JsonIgnore]
-		public ICollection<User> Users { get; set; }
+		public ICollection<Address> Addresses { get; set; }
+
+		public ICollection<Order> Orders { get; set; }
 	}
 }

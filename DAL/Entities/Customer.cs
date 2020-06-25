@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 using System.Text.Json.Serialization;
 
 namespace DAL.Entities
@@ -23,7 +21,7 @@ namespace DAL.Entities
 		public User User { get; set; }
 
 		[Column("photo")]
-		public byte Photo { get; set;}
+		public byte Photo { get; set; }
 
 		[Column("address")]
 		public string Address { get; set; }
@@ -32,7 +30,7 @@ namespace DAL.Entities
 		public string VehicleType { get; set; }
 
 		[Column("listofchildren")]
-		public  ICollection<Child> Children { get; set; }
+		public ICollection<Child> Children { get; set; }
 
 		[JsonIgnore]
 		public ICollection<Order> Orders { get; set; }
